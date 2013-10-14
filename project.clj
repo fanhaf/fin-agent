@@ -12,4 +12,5 @@
 ]
   :plugins [[lein-ring "0.7.5"]]
   :ring {:handler finagent.core/application}
+  :uberjar-name "fin-agent-standalone.jar"
 )
