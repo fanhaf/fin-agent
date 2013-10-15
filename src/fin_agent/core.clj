@@ -1,6 +1,6 @@
-(ns finagent.core
+(ns fin-agent.core
   (:use [compojure.core :only (defroutes)])
-  (:require [finagent.controllers.csvtranslator :as translator]
+  (:require [fin-agent.controllers.csvtranslator :as translator]
             [ring.middleware.params :as params]
             [ring.middleware.multipart-params :as multipart-params]
             [ring.adapter.jetty :as jetty])

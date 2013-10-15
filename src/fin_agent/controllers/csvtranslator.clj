@@ -1,4 +1,4 @@
-(ns finagent.controllers.csvtranslator
+(ns fin-agent.controllers.csvtranslator
   (:use [compojure.core :only (defroutes GET POST)]
         [clojure.java.io]
         [hiccup.core]

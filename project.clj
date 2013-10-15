@@ -9,8 +9,8 @@
                  [ring/ring-jetty-adapter "1.1.6"]
                  [hiccup "1.0.3"]
                  [clojure-csv/clojure-csv "2.0.0-alpha1"]
-]
+                 ]
   :plugins [[lein-ring "0.7.5"]]
-  :ring {:handler finagent.core/application}
+  :ring {:handler fin-agent.core/application}
   :uberjar-name "fin-agent-standalone.jar"
 )

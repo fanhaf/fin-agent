@@ -1,4 +1,4 @@
-(ns finagent.core-test
+(ns fin-agent.core-test
   (:use clojure.test
         finagent.core))
 
