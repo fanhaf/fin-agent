@@ -8,51 +8,75 @@
   )
 
 (defn home-page []
-    (html [:form {:action "/translator/pekao" :method "post" :enctype "multipart/form-data"}
+    (html [:form {:action "/translator/mbank" :method "post" :enctype "multipart/form-data"}
                     [:input {:name "file" :type "file" :size "20"}]
                     [:input {:type "submit" :name "submit" :value "submit"}]]))
 
-(defn parse-csv-account [filename]
-  (let [x (slurp filename :encoding "Windows-1250")]
-    (csv/parse-csv x :delimiter \;)))
+; ----------------
+(defn filter-operation-columns [report] (filter #(= (count %) 9) report))
+(defn truncate-header [operation-report] (drop 1 operation-report))
+(defn truncate-footer [operation-report] (drop-last operation-report))
 
-(defn operations-table [parsed-report]
-  (filter #(= (count %) 9) parsed-report))
+(defn filter-operations-source [report] 
+  (-> report 
+    filter-operation-columns
+    truncate-header
+    truncate-footer))
 
-(defn operations [table]
-  (drop 1 (drop-last (operations-table table))))
+(defn filter-whitespaces [string] (filter #(not= \space %) string))
 
-(defn show-operations [filename]
-  (let [report (parse-csv-account filename)]
-    (operations report)))
+(defn words [string] (split string #"[ \t]"))
+(defn filter-empty [list] (filter #(not-empty %) list))
+(defn filter-duplicate-whitespace [string]
+   (join " " (filter-empty (words string))))
+
+(defn operation-type [trans-src] (filter-duplicate-whitespace (nth trans-src 2)))
+(defn operation-description [trans-src] (filter-duplicate-whitespace (nth trans-src 3)))
+
+(defn prepare-amount [amount-string] (apply str (filter-whitespaces amount-string)))
+(defn prepare-description [trans-src] 
+  (let [op-type (operation-type trans-src)
+        op-desc (operation-description trans-src)]
+    (apply str op-type ": " op-desc)))
+
+(defn to-operation [trans-src]
+  (let [date (nth trans-src 1)
+        amount (prepare-amount (nth trans-src 6)) 
+        description (prepare-description trans-src)
+        ]
+    {:date date :amount amount :description description}))
 
 (def qif-trans-format "D%s\nP%s\nT%s\n^\n")
+(defn to-qif [operation]
+  (format qif-trans-format (operation :date) (operation :description) (operation :amount)))
 
-(defn coerce-to-qif-trans [op]
-  (let [date (nth op 1)
-        description (join " " (distinct (split (str (nth op 2) ": " (nth op 3)) #" ")))
-        amount (nth op 6)]
-    (format qif-trans-format date description amount)))
+(defn operations-in-qif [operation-list]
+  (map to-qif operation-list))
 
-(defn as-qif [trans-table]
-  (map coerce-to-qif-trans trans-table))
+(defn operations-to-qif-list [report] 
+  (let [operation-list (filter-operations-source report)]
+    (->> operation-list
+      (map to-operation)
+      (map to-qif))))
 
-(defn upload-file [file]
-  (let [file-name (file :filename)
-        size (file :size)
-        actual-file (file :tempfile)]
-    (copy actual-file (File. (format "/tmp/upload" file-name)))))
+(def qif-header "!Account\nNmBank\nTBank\n^\n!Type:Bank\n")
+(defn report-as-qif [report]
+  (apply str qif-header (operations-to-qif-list report)))
 
-(defn output-file [file-content]
-  (spit "/tmp/transactions.qif" (apply str file-content)))
+(defn qif-response [report report-filename]
+  {:status 200
+   :headers {"Content-Type" "text/plain; charset=\"UTF-8\""
+             "Content-Disposition" (str "attachment; filename=" report-filename)}
+   :body (report-as-qif report)})
 
 (defroutes routes
-           (GET "/translator/pekao" []
+           (GET "/translator/mbank" []
                 (home-page))
-           (POST "/translator/pekao" {params :params}
-                 (let [file (get params "file")]
-                   (upload-file file))
-                 (output-file (as-qif (show-operations "/tmp/upload")))
-                 (file "/tmp/transactions.qif"))
-           )
-
+           (POST "/translator/mbank" {params :params}
+                 (let [file-param (params "file")
+                       temp-file (file-param :tempfile)
+                       report-string (slurp temp-file :encoding "windows-1250")
+                       report (csv/parse-csv report-string :delimiter \;)
+                       ]
+                   (qif-response report (str (file-param :filename) ".qif"))
+                   )))
