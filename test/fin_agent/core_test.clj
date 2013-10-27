@@ -1,6 +1,6 @@
 (ns fin-agent.core-test
   (:use clojure.test
-        finagent.core))
+        fin-agent.core))
 
 (deftest a-test
   (testing "Dummy test"
