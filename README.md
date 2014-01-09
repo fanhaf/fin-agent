@@ -1,6 +1,6 @@
 # finagent
 
-A Clojure library designed to ... well, that part is up to you.
+[![Build Status](https://travis-ci.org/fanhaf/fin-agent.png?branch=master)](https://travis-ci.org/fanhaf/fin-agent)
 
 ## Usage
 
