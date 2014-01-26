@@ -10,7 +10,10 @@
                  [hiccup "1.0.3"]
                  [clojure-csv/clojure-csv "2.0.1"]
                  ]
-  :plugins [[lein-ring "0.7.5"]]
+  :dev-dependencies [[speclj "2.9.0"]]
+  :test-path "spec/"
+  :plugins [[lein-ring "0.7.5"]
+            [speclj "2.9.0"]]
   :ring {:handler fin-agent.core/application}
   :uberjar-name "fin-agent-standalone.jar"
 )
