@@ -11,7 +11,7 @@
                  [clojure-csv/clojure-csv "2.0.1"]
                  ]
   :dev-dependencies [[speclj "2.9.0"]]
-  :test-path "spec/"
+  :test-paths ["spec/"]
   :plugins [[lein-ring "0.7.5"]
             [speclj "2.9.0"]]
   :ring {:handler fin-agent.core/application}
