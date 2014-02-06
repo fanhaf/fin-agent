@@ -1,12 +1,15 @@
 language: clojure
 lein: lein2
-script: "lein2 spec"
-jdk: 
+script: lein2 spec
+jdk:
 - openjdk6
-deploy: 
+deploy:
   provider: heroku
-  api_key: 
+  api_key:
     secure: MvrcQ6g35yBMyKVkGHqt31K0LzrMm2DiN81FnvWFwc1kCefS/w2eCiFR4DbSivPo2Pq0EIOyTBfdc/DpMZJiikPh4eHOp15v0MTuNcx4YuHsePvPK7diZWBW+7uxbZ2nEbSiL/9lfClq/F/Wa892XNzf/J+CIzb+cVQP/gERty4=
   app: fanhaf-fin-agent
-  "on": 
+  on:
     repo: fanhaf/fin-agent
+env:
+  global:
+    secure: a0UY1YDUM3x3vl65U8F6Iot3UqFDYeYK0UnWX2qGJQOPDYRLhACcWlT1K2AfcqsarYDDbFuGHv2RvTNYoycHHbc7srmp4LpdSTKYgS1bYKObUUBKV9I3QTwNuYx7gN8RPZISvSBHV/4b5f+J4wxU0rWC4nsxFxEk8keWanNw2Pg=
