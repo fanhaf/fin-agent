@@ -4,15 +4,12 @@
 (defn to-qif [operation]
   (format qif-trans-format (operation :date) (operation :description) (operation :amount)))
 
-(defn operations-in-qif [operation-list]
-  (map to-qif operation-list))
+(defn operations-to-qif-list [operation-list] 
+      (map to-qif operation-list))
 
-(defn operations-to-qif-list [report] 
-  (let [operation-list (filter-operations-source report)]
-    (->> operation-list
-      (map to-operation)
-      (map to-qif))))
+(def qif-header-format "!Account\nN%s\nTBank\n^\n!Type:Bank\n")
+(defn qif-header [account-name] 
+  (format qif-header-format account-name))
 
-(def qif-header "!Account\nNmBank\nTBank\n^\n!Type:Bank\n")
 (defn report-as-qif [report]
   (apply str qif-header (operations-to-qif-list report)))
