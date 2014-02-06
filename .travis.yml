@@ -6,7 +6,7 @@ jdk:
 deploy:
   provider: heroku
   api_key:
-    secure: MvrcQ6g35yBMyKVkGHqt31K0LzrMm2DiN81FnvWFwc1kCefS/w2eCiFR4DbSivPo2Pq0EIOyTBfdc/DpMZJiikPh4eHOp15v0MTuNcx4YuHsePvPK7diZWBW+7uxbZ2nEbSiL/9lfClq/F/Wa892XNzf/J+CIzb+cVQP/gERty4=
+    secure: Al/Kfof8SyFfAr8dLyrIZlv81AGPt8+MzOSYprcq1wn83vIlRPn6urF17oT3K7NWBZiJh601wGGsqS2tjjlXH82dWrM1H58zTME+PykMqtZUUL5AnAHgV5ns65RP6TMLoV1yfanwFW9fQD9kI3QsQHsn45dkRC9Cjm+51VKb6V8=
   app: fanhaf-fin-agent
   on:
     repo: fanhaf/fin-agent
