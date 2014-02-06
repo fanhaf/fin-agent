@@ -13,11 +13,11 @@
                     [:input {:name "file" :type "file" :size "20"}]
                     [:input {:type "submit" :name "submit" :value "submit"}]]))
 
-(defn qif-response [operations qif-filename]
+(defn qif-response [account-header operations qif-filename]
   {:status 200
    :headers {"Content-Type" "text/plain; charset=\"UTF-8\""
              "Content-Disposition" (str "attachment; filename=" qif-filename)}
-   :body (qif/report-as-qif operations)})
+   :body (qif/report-as-qif account-header operations)})
 
 (defroutes routes
            (GET "/translator/mbank" []
@@ -29,5 +29,5 @@
                        report (csv/parse-csv report-string :delimiter \;)
                        operations (generic/to-operation-list mbank/filter-operations-source mbank/to-operation report)
                        ]
-                   (qif-response operations (str (file-param :filename) ".qif"))
+                   (qif-response "mBank" operations (str (file-param :filename) ".qif"))
                    )))

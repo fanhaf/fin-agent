@@ -11,5 +11,5 @@
 (defn qif-header [account-name] 
   (format qif-header-format account-name))
 
-(defn report-as-qif [report]
-  (apply str qif-header (operations-to-qif-list report)))
+(defn report-as-qif [account-name operations]
+  (apply str (qif-header account-name) (operations-to-qif-list operations)))
