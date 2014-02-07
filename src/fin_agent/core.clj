@@ -2,6 +2,7 @@
   (:use [compojure.core :only (defroutes)])
   (:require [fin-agent.controllers.mbank :as mbank-controller]
             [fin-agent.controllers.pekao :as pekao-controller]
+            [fin-agent.controllers.pekao-arch :as pekao-arch-controller]
             [ring.middleware.params :as params]
             [ring.middleware.multipart-params :as multipart-params]
             [ring.adapter.jetty :as jetty])
@@ -10,6 +11,7 @@
 (defroutes routes
   mbank-controller/routes
   pekao-controller/routes
+  pekao-arch-controller/routes
   )
 
 (def application (-> routes
