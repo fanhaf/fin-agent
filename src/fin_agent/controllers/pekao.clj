@@ -26,7 +26,7 @@
                  (let [file-param (params "file")
                        temp-file (file-param :tempfile)
                        report-string (slurp temp-file :encoding "windows-1250")
-                       report (csv/parse-csv report-string :delimiter \tab)
+                       report (csv/parse-csv report-string :delimiter \;)
                        operations (generic/to-operation-list pekao/filter-operations-source pekao/to-operation report)
                        ]
                    (qif-response "Pekao-net" operations (str (file-param :filename) ".qif"))
